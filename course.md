@@ -1517,9 +1517,9 @@ The error message you'll get: "_\`var\` does not live long enough_" refers to th
 
 To conclude this section, references are pointers that points to valid address, there cannot be any mutable references if another reference is is defined.
 
-### 4.3. The `Slice` type
+### 4.3. The Slice type
 #### 4.3.1. A long introduction
-A `Slice` is a continious reference to a part of a collection (we currently know only `String` as a collection but we'll discuss other like vectors in chapter 8 but you can always check [the doc](https://doc.rust-lang.org/std/collections/index.html)).
+A Slice is a continious reference to a part of a collection (we currently know only `String` as a collection but we'll discuss other like vectors in chapter 8 but you can always check [the doc](https://doc.rust-lang.org/std/collections/index.html)).
 
 The Book gives this exercise: "_Write a function that takes a string of words separated by spaces and returns the first word it finds in that string. If the function doesn’t find a space in the string, the whole string must be one word, so the entire string should be returned._" (for example with the function `foo` the answer: `foo("I am words") == "I"`, `foo("word") == "word"`, `foo("single(s) words") == "single(s)"`).
 
@@ -1589,9 +1589,9 @@ fn second_word(txt : String) -> (usize, usize){ //...
 ```
 It would return two ints but not linked to data at all, we'd have to update them manually if `txt` would've changed.
 
-Fortunaly, Rust has a built-in that we can use: `Slice`s.
+Fortunaly, Rust has a built-in that we can use: Slices.
 
-#### 4.3.2. Introduction to `String` `Slice`s
+#### 4.3.2. Introduction to `String` Slices
 A _string slice_ is a reference to a part of a `String`, it looks like this:
 ```rust
 let alphabet = String::from("abcdefghijklmnopqrstuvwxyz");
@@ -1609,7 +1609,7 @@ In this case the `s` is defined with `let s = "hello world"` and `let world = &s
 _note: if your slice begin at `0`, the first `0` is falcutative: `&s[..5]` is valid.  
 By the same logic, if you want to take until the last character of the string, the second number is not required: `&s[6..]` and `&s[..]` are valid._
 
-Now you know this go rewrite your `first_word()` function (you'll have to return a reference to a `str` due to string `Slice`s being represented by the type `&str`).  
+Now you know this go rewrite your `first_word()` function (you'll have to return a reference to a `str` due to string Slices being represented by the type `&str`).  
 Hence the definition of your function should be:
 `fn first_word(txt : &String) -> &str {`
 ____________________________________
@@ -1645,9 +1645,9 @@ fn main(){
 ```
 
 The error message says: ``cannot borrow `my_str` as mutable because it is also borrowed as immutable``.  
-If you remember last section; when a mutable reference is created, there cannot have any other reference to prevent data races. And the `.clear()` method uses a mutable reference to clear the `String`, `my_first` being a `Slice` (so being a reference) the compiler refuses to compile this code.
+If you remember last section; when a mutable reference is created, there cannot have any other reference to prevent data races. And the `.clear()` method uses a mutable reference to clear the `String`, `my_first` being a Slice (so being a reference) the compiler refuses to compile this code.
 
-A more experienced programmer would not have written the function `first_word()` as we did, he would have made the parameter a `Slice` too:
+A more experienced programmer would not have written the function `first_word()` as we did, he would have made the parameter a Slice too:
 ```rust
 fn first_word(txt : &str) -> &str{
 ```
@@ -2404,13 +2404,13 @@ _______
 fn multiply_by_two(n : Option<isize>) -> Option<isize>{
 	match n {
 		None => None,			//returns None if None is passed
-		Some(x)	=> Some(x * 2),	//else returns x*2
+		Some(x)	=> Some(x * 2),	//returns x*2 if Some is passed
 	}
 }
 fn main(){
-	let number 	= Some(345);						//-> Some(345)
-	let can_be_number 	= multiply_by_two(number);	//-> Some(690)
-	let none	= multiply_by_two(None);	//-> None
+	let number			= Some(345);				//-> Some(345)
+	let can_be_number	= multiply_by_two(number);	//-> Some(690)
+	let none			= multiply_by_two(None);	//-> None
 }
 ```
 
@@ -2558,7 +2558,7 @@ We'll also cover encapsulation which is a OOP concept that let you hide or forbi
 We will also talk about scopes and how to resolve conflicting names. Those scopes aren't those from your code which are defined by curly brackets `{}`, they are scopes inside project hierarchy.
 
 Before starting let's see some definitions:  
-<dl>
+<!--<dl>
 	<dt>The module system:</dt>
 	<dd>This system is the one containing all the features that lets organize your code, it contains all the feature listed below.</dd>
 	<dt>Packages:</dt>
@@ -2566,10 +2566,88 @@ Before starting let's see some definitions:
 	<dt>Crates</dt>
 	<dd>A tree of modules that produces once compiled an executable or a library (binary and library crates)</dd>
 	<dt>Modules (and <code>use</code>):</dt>
-	<dd>Rust feature that lets you control the organization and use your paths</dd>
+	<dd>Rust feature that lets you control the organization of your code and use paths</dd>
 	<dt>Paths:</dt>
 	<dd>A way to name items like structures, function or modules.</dd>
-	
-</dl>
+</dl>-->
+##### The module system:	<!--I know this is bad practice-->
+This system is the one containing all the features that lets organize your code, it contains all the feature listed below.
+
+##### Packages:
+A way provided by Cargo to build, test and share crates.
+
+##### Crates:
+A tree of modules that produces once compiled an executable or a library (binary and library crates).
+
+##### Modules (and `use`):
+Rust feature that lets you control the organization of your code and use paths.
+
+##### Paths:
+A way to name items like structures, function or modules.
 
 ### 7.1. Packages and crates
+Crates are the smallest piece of code the compiler can handle, even our very first project is considered a crate.  
+There are two types of crates:
+- Binary crates: A program that can run, all the crates we've created are binary crates.
+- Library crates: A crate that provides functions, types, .... They don't have any `main()` functions and cannot compile to an executable by themselves, they need to be included by an binary crate to be used. When informal, rustacean use the word "crate" to imply "library crate", they use this word as a synonym of the concept of libraries in other programming languages.
+
+The _crate root_ is the binary crate that the compiler starts from.
+
+A package is a set of crates but:
++ it must have a Cargo.toml that say how to build the crates.
++ it must contain at least one (binary or library) crate.
++ it must have at most one library crate.
+
+
+### 7.2. Defining Modules to Control Scope and Privacy
+#### 7.2.1. Modules Cheat Sheet
+This sub-section is a quick reference to about the usage of modules, paths, `use` and `pub` and how most of developpers make tidy code. There will be more examples later in this chapter but if you ever forget how one of these work, jump here.
+
+- **Declaring modules**: in the crate root, you can declare modules with the `mod` keyword. Let's say you want a module named "garden", you will write `mod garden;` and the compiler will look for the module's code in those places:
+	+ Inline: inside the curly `{}` you put instead of the semi-colon `;`.
+	+ In the file `src/garden.rs`
+	+ In the file `src/garden/mod.rs`
+
+- **Declaring sub-modules**: in any other file that the crate root, you can declare a sub-module the same way you would for regular modules. If you want add to `garden` a sub-module named `vegetable`, you'd write `mod vegetable;` in `src/garden.rs` and the compiler would search its code in those places:
+	+ Inline
+	+ In the file `src/garden/vegetable.rs`
+	+ In the file `src/garden/vegetable/mod.rs`
+
+- **Using the code inside those modules**: Once you have a module, you can access its code anywhere in the same crate as long you respect privacy rules. For example, you can declare the type `Carrot` inside `vegetable`, you would access it via the path `crate::garden::vegetable::Carrot`.
+
+- **Private vs public**: By default, all code in a module is private, to make it public use `pub`. You are also able to declare all of the module public by writing `pub` before the `mod` keyword.
+
+- **Using `use`**: This keyword is like in C++, it shorten the length of the paths you have to write. For example, if you need to use a lot the `vegetable` module, you can write `use crate::garden::vegetable;` it lets you access the elements inside the module easily since you can now just write `Carrot` to access the type.
+
+Now we've seen the global picture, let's see the details.
+
+#### 7.2.2. Grouping code
+Modules let us define the privacy of their elements. Private elements are only available to other modules elements, they are for internal use. Public elements are available everywhere the module is included.
+
+To understand all of this, let's create a restaurant library crate. In the restaurant industry, there are 2 sides: the _front of the house_ and the _back of the house_. The front of the house is what is seen by the customers: waiter serving food, bartenders preparing cocktails or the hosts seating the customers. The back of the house is whet is not shown, chefs coocking, dishwasher cleaning the plates and manager doing administrative work.  
+We will only write code for the front of the house.
+
+We can create a new library with Cargo by passing it the `--lib` argument.
+We can then compile this code in `src/lib.rs`:
+```Rust
+mod front_of_house {
+	mod hosting {
+		fn add_to_waitlist() {}
+
+		fn seat_at_table() {}
+	}
+
+	mod serving {
+		fn take_order() {}
+
+		fn serve_order() {}
+
+		fn take_payment() {}
+	}
+}
+```
+
+Modules are like namespaces, they can contain definitions for types, constants and traits.  
+Modules let us visually see which element is related to which.
+
+### 7.3. Paths for Referring to an Item in the Module Tree
