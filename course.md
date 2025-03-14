@@ -2615,7 +2615,7 @@ This sub-section is a quick reference to about the usage of modules, paths, `use
 
 - **Using the code inside those modules**: Once you have a module, you can access its code anywhere in the same crate as long you respect privacy rules. For example, you can declare the type `Carrot` inside `vegetable`, you would access it via the path `crate::garden::vegetable::Carrot`.
 
-- **Private vs public**: By default, all code in a module is private, to make it public use `pub`. You are also able to declare all of the module public by writing `pub` before the `mod` keyword.
+- **Private vs public**: By default, all code in a module is private, to make it public use `pub`.
 
 - **Using `use`**: This keyword is like in C++, it shorten the length of the paths you have to write. For example, if you need to use a lot the `vegetable` module, you can write `use crate::garden::vegetable;` it lets you access the elements inside the module easily since you can now just write `Carrot` to access the type.
 
@@ -2651,3 +2651,124 @@ Modules are like namespaces, they can contain definitions for types, constants a
 Modules let us visually see which element is related to which.
 
 ### 7.3. Paths for Referring to an Item in the Module Tree
+#### 7.3.1. What is a path
+In Rust, paths for functions are the same thing as paths for files just with `::` istead of `/` (or `\` in Windows). For beginners, there are two different types of paths:
+- Absolute paths: They go for the crate root to the desired function.
+- Relative paths: They begin at the current module.
+
+As an example, we can create the function `eat_at_restaurant()` that will use those two types of paths:
+```Rust
+mod front_of_house {
+	mod hosting {
+		fn add_to_waitlist() {}
+	}
+}
+
+pub fn eat_at_restaurant() {
+	// Absolute path
+	crate::front_of_house::hosting::add_to_waitlist();	//`crate` represent the current crate
+
+	// Relative path
+	front_of_house::hosting::add_to_waitlist();
+}
+```
+This code does not compile because we didn't make `add_to_waitlist()` public, how to make it public? Read the next section to learn this.
+
+#### 7.3.2. Using the `pub` keyword
+As we seen in the [cheatsheet](#721-modules-cheat-sheet), to make something public we need to use the `pub` keyword:
+```Rust
+mod front_of_house {
+	pub mod hosting {
+		fn add_to_waitlist() {}
+	}
+}
+
+pub fn eat_at_restaurant() {
+	// Absolute path
+	crate::front_of_house::hosting::add_to_waitlist();
+
+	// Relative path
+	front_of_house::hosting::add_to_waitlist();
+}
+```
+But this code does not compile too, we get this error message:
+```
+function `add_to_waitlist` is private
+```
+
+Even if the _module_ `hosting` is public, all functions inside are by default private. This fix this error, we need to add another `pub`:
+```Rust
+mod front_of_house {
+	pub mod hosting {
+		pub fn add_to_waitlist() {}
+	}
+}
+
+pub fn eat_at_restaurant() {
+	// Absolute path
+	crate::front_of_house::hosting::add_to_waitlist();
+
+	// Relative path
+	front_of_house::hosting::add_to_waitlist();
+}
+```
+
+If you ever plan to write a library, there's a lot more to take into account than just public or private functions, or even pure code. Those consideration are not in the Book but there is the [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/) that explain convention and good practises.
+
+#### 7.3.3. The usage of `super` in relative paths
+Using the `super` keyword is equivalent of using `..` in a filepath, it elevate the scope to the parent scope. To get an example, let's take the old `front_of_the_house` module:
+```Rust
+mod front_of_house {
+	mod hosting {
+		fn add_to_waitlist() {}
+
+		fn seat_at_table() {}
+
+		fn new_client() {
+			add_to_waitlist();
+
+			super::do_nothing();
+			//If we wanted to use an absolute path we'd have to write this:
+			//crate::front_of_house::do_nothing()
+			
+			seat_at_table();
+		}
+	}
+
+	mod serving {
+		fn take_order() {}
+
+		fn serve_order() {}
+
+		fn take_payment() {}
+	}
+
+	fn do_nothing() {}
+}
+```
+
+#### 7.3.4. Strutures and enumarations' privacy
+Structures follow the same rules as modules: every member is private by default:
+```Rust
+struct Menu {
+	pub mealAvailable   : [String; 3],
+	culinaryExperiments : [String; 3]
+}
+
+//can only access `mealAvailable`
+```
+
+Enumerations follow the opposite rule: every variant is public by default, that's because an enum with only private field is useless:
+```Rust
+enum dishKind {
+	Soup,
+	Salad,
+	Buger,
+	Vegan,
+	//...
+}
+
+//All kinds	of dishes are available
+```
+
+### 7.4. Bringing Paths into Scope with the use Keyword
