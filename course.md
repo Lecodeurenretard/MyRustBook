@@ -2771,4 +2771,4 @@ enum dishKind {
 //All kinds	of dishes are available
 ```
 
-### 7.4. Bringing Paths into Scope with the use Keyword
+### 7.4. Bringing Paths into Scope with the `use` Keyword
