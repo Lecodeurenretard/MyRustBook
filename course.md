@@ -1,4 +1,3 @@
-<!--This book is made in Markdown and the characters between \$ are $\KaTeX$ code.-->
 # Programming in Rust: a shortened Book
 Links to the Book:
 + **The _Book_** (for learning Rust): <https://doc.rust-lang.org/book/>  
@@ -2772,3 +2771,177 @@ enum dishKind {
 ```
 
 ### 7.4. Bringing Paths into Scope with the `use` Keyword
+#### 7.4.1. `use` and scopes
+The `use` keyword is a bit like the `using` keyword in C++ but more restricted. `use` have only one purpose: shorten paths.  
+ie:
+```Rust
+mod Languages {
+	pub mod Rust {
+		pub fn compile() {}
+	}
+}
+
+use Languages::Rust::compile;
+compile();	//valid
+```
+
+The shortcut is only valid **in the exact same scope** as the keyword is used.
+
+So this will not compile:
+```Rust
+mod Languages {
+	pub mod Rust {
+		pub fn compile() {}
+	}
+	use Languages::Rust::compile;	//throw a warning because it is not used
+
+	pub mod Javascript {
+		pub fn execute() {
+			compile();	//throw an error
+		}
+	}
+}
+```
+
+#### 7.4.2. Idoms
+In the previous sub-section, we imported `compile()` by writing its full path instead of the path to its parent module, because for one function it's okay but for 4:
+```Rust
+mod Languages {
+	pub mod Rust {
+		pub fn compile()	{}
+		pub fn assemble()	{}
+		pub fn link()		{}
+		pub fn execute()	{}
+	}
+
+	use Languages::Rust::compile;
+	use Languages::Rust::assemble;
+	use Languages::Rust::link;
+	use Languages::Rust::execute;
+	pub fn rustc() {
+		compile();
+		assemble();
+		//...
+	}
+}
+```
+
+That's difficult to read, why not just:
+```Rust
+mod Languages {
+	pub mod Rust {
+		pub fn compile()	{}
+		pub fn assemble()	{}
+		pub fn link()		{}
+		pub fn execute()	{}
+	}
+
+	use Languages::Rust;
+	pub fn rustc() {
+		Rust::compile();
+		Rust::assemble();
+		//...
+	}
+}
+```
+Which is more compact. The answer is conventions, we should only create shortcuts for what we need else that's not _"idiomatic"_. There is however one exception, when importing two objects with the same name since it would create a name conflict: the reason ~~namespaces~~ modules were invented.
+
+#### 7.4.3. Creating aliases
+The `as` keyword is similar to Python's when importing.
+
+```Rust
+use std::fmt::Result as FmtResult;
+use std::io::Result  as IoResult;
+
+fn function1() -> FmtResult {}
+
+fn function2() -> IoResult<()> {}
+```
+
+#### 7.4.4. Re-exporting
+The imported names are by default private and cannot be accessed in other scopes, this can be avoided by mking them public with `pub`:
+```Rust
+mod Discord {
+	pub mod Message {
+		pub enum Type {
+			text,
+			command,
+			audio,
+			image,
+			video
+		}
+	}
+	
+	pub use Message::Type as MsgType;
+}
+
+fn guessMessageType(message: String) -> Discord::MsgType {}
+```
+This method is called re-exporting, it's useful when restructuring for users (other programmers) since you may want to see the library you built in a different manner that you wrote it.
+
+#### 7.4.5. Nesting paths
+If you recall [7.4.2.](#742-idoms), we had to write many paths to get all functions into scopes. We can limit the number of `use` with nested paths:
+```Rust
+mod Languages {
+	pub mod Rust {
+		pub fn compile()	{}
+		pub fn assemble()	{}
+		pub fn link()		{}
+		pub fn execute()	{}
+	}
+
+	//three lines saved
+	use Languages::Rust::{compile, assemble, link, execute};
+	pub fn rustc() {
+		compile();
+		assemble();
+		//...
+	}
+}
+```
+
+If we want to only import `execute()` in the scope and the `Rust` module, we could
+```Rust
+use Languages::Rust;
+use Languages::Rust::execute;
+```
+or without any redundancy
+```Rust
+use Languages::Rust::{self, execute};
+```
+where `self` represents the `Rust` module.
+
+We're going a bit off tracks but if you wondered, you cannot catch two names and then get a shared children. So the following code won't compile
+```Rust
+mod Languages {
+	pub mod Lua {
+		pub mod Function {
+			pub fn getName() {}
+		}
+	}
+	pub mod Bash {
+		pub mod Function {
+			pub fn execute(){}
+		}
+	}
+}
+
+use Languages::{Lua, Bash}::Function::{getName, execute};	// after curly brackets a semicolon is expetcted
+```
+
+#### 7.4.6. The glob operator
+You can import all elements of a module with the glob operator `*`:
+```Rust
+mod Languages {
+	pub mod English	{}
+	pub mod French	{}
+	pub mod Spanish	{}
+	pub mod German	{}
+	pub mod Russian	{}
+}
+
+use Language::*;
+```
+Although you can do it, it doesn't mean you should since with operator you can't see the names you are importing which can lead to name confilcts and a less readable code.
+
+### 7.5. Separating Modules into Different Files
