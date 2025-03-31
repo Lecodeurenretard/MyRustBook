@@ -105,7 +105,7 @@ $ rm -r <folder>
 $ rd /s <folder>
 ```
 
-There's a joke in the Linux community that is to run the command `sudo rm -rf /` to fix an issue. In case you don't know it, **$\color{red} \text{DO NOT EVER RUN IT}$** unless you know what you're doing **and** have a copy of your files.  
+There's a joke in the Linux community that is to run the command `sudo rm -rf /` to fix an issue. In case you don't know it, **$\color {red} \text{DO NOT EVER RUN IT}$** unless you know what you're doing **and** have a copy of your files.  
 If you don't understand the joke, the `-rf` flag is a contraction of `-r -f` the second flag being a shorthand for `--force` that tells the command to not ask for confirmation; the `/` at the end is the directory to delete, it is the _root directory_ which is parent to all other directories. The `sudo` at before the command is to run the command as the root user (which has all rights like an admin). In short, **it deletes all files present on drives where Linux has access** (which is generally all).  
 If you're curious, here is the Windows equivalent: `rd /s /q C:`.
 
@@ -392,7 +392,7 @@ Yes, we did but Rust has a feature called _shadowing_ which let us redeclare a v
 ### 2.4. Allowing several attempts
 In this aim, we will insert a `loop` loop:
 ```rust
-loop{
+loop {
 	let mut guess = String::new();
 	
 	//asking a number and converting it
@@ -480,7 +480,7 @@ fn main() {
 	//println!("(psst, the number is: {secret_number})"); //comented so the game isn't too easy
 
 	println!("Please input your guess.");
-	loop{
+	loop {
 		let mut guess = String::new();
 
 		io::stdin()
@@ -551,10 +551,10 @@ They have, howerver multiples differences:
 + Constants must be staticly typed: `const x = 4;` is invalid but `const x : u8 = 4` is.
 + Constant can only be defined with value computable at compile time:
 ```rust
-fn just2() -> u8{	// will always be 2
+fn just2() -> u8 {	// will always be 2
 	return 2;
 }
-fn main(){
+fn main() {
 	println!("just2(): {}", just2());	//prints 2
 
 	const X :u8 = 2 * 4 + 5;
@@ -651,11 +651,11 @@ With this code, Rust will _panic_ (end with an error (see [chap 9.](#9-))) and y
 <!-- don't work because of the types but the logic works for positive nums
 You can also do this, just use this code:
 ```rust
-fn two_complement_wrapping(x : isize){	//let's say that [type] can be all int types
+fn two_complement_wrapping(x : isize) {	//let's say that [type] can be all int types
 	return x % (usize::MIN *-2 -1);
 }
 
-fn main(){
+fn main() {
 	println!("{}", two_complement_wrapping(usize::MAX + 2));	//out-> 2
 	println!("{}", two_complement_wrapping(usize::MAX + 80));	//out-> 80
 	println!("{}", two_complement_wrapping(usize::MAX * 2));	//out-> 0
@@ -677,7 +677,7 @@ You can also write numbers with prefixes that will dertermine their base (2, 8, 
 
 The _byte_ notation returns the [ASCII number](https://www.ascii-code.com/) of the char:
 ```rust
-fn main(){
+fn main() {
 	println!("{}", b'\n'); 	//out-> 10
 	println!("{}", b'N'); 	//out-> 78	
 	println!("{}", b'@'); 	//out-> 64
@@ -693,20 +693,20 @@ Rust handles the five basic operations: addition, subtraction, multiplication, d
 ```rust
 fn main() {
 	// addition
-	let sum = 5 + 10;	//15
+	let sum = 5 + 10;				//->15
 
 	// subtraction
-	let difference = 95.5 - 4.3; //91.2
+	let difference = 95.5 - 4.3;	//->91.2
 
 	// multiplication
-	let product = 4 * 30;	///120
+	let product = 4 * 30;			//->120
 
 	// division
-	let quotient = 56.7 / 32.2;	//1.7608695652173911
-	let truncated = -5 / 3; // -1 because we're doing whole division
+	let quotient = 56.7 / 32.2;		//->1.7608695652173911
+	let truncated = -5 / 3; 		//->-1 (we're doing whole division)
 
 	// modulo
-	let remainder = 43 % 5;	// 3
+	let remainder = 43 % 5;			//->3
 }
 ```
 
@@ -717,7 +717,7 @@ Those are 1-bit binary: either `true` (`1`) xor `false` (`0`). Their main usage 
 ##### 3.2.1.5 Characters
 The type `char` is for storing characters like 'a' or '😻':
 ```rust
-fn main(){
+fn main() {
 	let f : char = 'f';
 	let cat = '😻';
 	let N = 'ℤ';
@@ -730,7 +730,7 @@ There is another way to write chars, you can write each char like this: `'\u{[un
 
 namely:
 ```rust
-fn main(){
+fn main() {
 	println!("{}", '\u{00D8}'); //out-> Ø
 	println!("{}", '\u{0000}'); //out-> null char (you can do '\0' too)
 	println!("{}", '\u{0010}'); //out-> line feed (you can do '\n' too)
@@ -747,7 +747,7 @@ Those are a mix of many values into one type. We'll see the two primitive compou
 Tuples are the main ways to group pieces of data together.
 
 ```rust
-fn main(){
+fn main() {
 	let tuple : (i64, u8, char) = (-5, 250, 'c');
 }
 ```
@@ -756,7 +756,7 @@ A tuple can hold several types and can vary in size.
 You can unpack a tuple like in Python and access it with a dot. Unlike Python a tuple can change over time (if mutable).
 
 ```rust
-fn main(){
+fn main() {
 	let mut my_tuple = (1, 2, 3, 4, 5);
 
 	let (one, two, three, four, five) = my_tuple; // one = 1, two = 2, ...
@@ -789,7 +789,7 @@ You can fill an array by initializing it like so: `let array = [<element>; <numb
 
 example:
 ```rust
-fn main(){
+fn main() {
 	let mut my_array : [char; 3] = ['a', 'b', 'c'];
 	my_array[1] = 'e';
 
@@ -828,11 +828,11 @@ Like in maths, you can pass _parameters_ or _arguments_ to functions. A paramete
 The only difference is that in Rust you have to define the types, so: `fn foo(x, y) {}` is wrong but `fn foo(x : char, y : u32) {}` is correct.
 
 ```rust
-fn add(x : isize, y : isize){
+fn add(x : isize, y : isize) {
 	println!("{x} + {y} = {}", x+y);
 }
 
-fn main(){
+fn main() {
 	add(1, 2); //-> "1 + 2 = 3"
 	add(80, -30);//-> "80 + -30 = 50"
 }
@@ -846,7 +846,7 @@ In Rust, the concept of _statements_ and _expressions_ is a bit different compar
 Let's look at some examples:  
 Creating a variable and defining a function are **statements** , so this code does not make any sense:
 ```rust
-fn main(){
+fn main() {
 	let var1 = (let var2 = 5);
 
 	let mut foo = (fn s() {});
@@ -882,18 +882,18 @@ If your function return something else that the unit value `()`, you have to spe
 
 Those 4 functions do exactly the same thing:
 ```rust
-fn successor1(x : isize) -> isize{
+fn successor1(x : isize) -> isize {
 	return x+1;
 }
-fn successor2(x : isize) -> isize{
+fn successor2(x : isize) -> isize {
 x+1	//there is no semicolon
 }
-fn successor3(x : isize) -> isize{
+fn successor3(x : isize) -> isize {
 	return {	//definig a scope which returns x + 1
 		x + 1
 	};
 }
-fn successor4(x : isize) -> isize{
+fn successor4(x : isize) -> isize {
 	return x+1;
 
 	//the function ends to the returns statement so all the code after it will be unreachable
@@ -901,7 +901,7 @@ fn successor4(x : isize) -> isize{
 	x+1;	//creates a warning for unused statement
 }
 
-fn main(){
+fn main() {
 	println!("The first  successor to 142 is {}", successor1(142));		//out-> 143
 	println!("The second successor to 142 is {}", successor2(142));		//out-> 143
 	println!("The third  successor to 142 is {}", successor3(142));		//out-> 143
@@ -912,7 +912,7 @@ fn main(){
 ### 3.4. Comments
 A comment will not be compiled by the compiler, it is simple: `//` and the rest of the line is a comment:
 ```rust
-fn main(){
+fn main() {
 	//this is a comment
 	let x = 4; // the rest of the line is commented
 	println!("{x}");
@@ -955,7 +955,7 @@ where condition returns a _boolean_.
 
 For example:
 ```rust
-fn main(){
+fn main() {
 	if 5 > 80 {	//condition always false, the scope will never be executed
 		println!("You broke maths");
 	}
@@ -965,7 +965,7 @@ fn main(){
 
 You can also follow an `if` by an `else`, the `else` has no condition but will be executed if the first condition is `false`:
 ```rust
-fn main(){
+fn main() {
 	const FIVE : u8 = 5;
 	if FIVE > 80 {	//condition always false, the scope will never be executed
 		println!("You broke maths");
@@ -982,20 +982,25 @@ if cond_1 {
 	//if cond_1
 } else if cond_2 {
 	//if !cond_1 && cond_2
-}else if cond_3{
+}else if cond_3 {
 	//if !cond_1 && !cond_2 && cond_3
 }
 //...
-else if cond_n{
+else if cond_n {
 	//if !cond_1 && !cond_2 && ... && !cond_(n-1) &&cond_n
-}else{
+}else {
 	//if !(cond_1 || cond_2 || ... || cond_n)
 }
 ```
 
+
+
+
+
+<!--Wow! already the $1000^ {th}$ line! The 3rd chapter is 619 of those lines.-->
 Since `if` is an expression you can write
 ```rust
-fn main(){
+fn main() {
 	//...
 	let has_a_life = if is_online {"no"} else {"yes"};
 }
@@ -1007,15 +1012,14 @@ In Rust there are 3 loops: the `loop` loop, the `while` loop and the `for` loop.
 
 ##### 3.5.3.1. The `loop` loop
 This loop let us iterate until we explicitly tell it to stop, either with `Ctrl + C` if you are on the terminal, the task manager or the `break` statement.
-<!--Wow! already the $1000^{th}$ line (my editor counts only line breaks "\n")! The 3$^{rd}$ chapter is 619 of those lines.-->
 
 ##### 3.5.3.2. Returning from a loop
 To do this we use the keyword `break`:
 ```rust
-fn main(){
+fn main() {
 	let mut i = 0;
-	let res = loop{
-		if i >= 10{
+	let res = loop {
+		if i >= 10 {
 			break i;
 		}
 
@@ -1028,20 +1032,20 @@ fn main(){
 ##### 3.5.3.3. Breaking from a particular loop
 You can give names to loops witth labels:
 ```rust
-fn main(){
-	'my_loop: loop{		//the label must begin with a "'" else it will be mistaken for a variable
+fn main() {
+	'my_loop: loop {		//the label must begin with a "'" else it will be mistaken for a variable
 		// looping
 	}
 }
 ```
 If you do this, you can use the keywords `break` and `continue` to apply to the loop with a label:
 ```rust
-fn main(){
+fn main() {
 	let mut i = 0;
 	const MAX_LOOPING : u8 = 10;
-	'first: loop{
+	'first: loop {
 		let mut j = 0;
-		'second: loop{
+		'second: loop {
 			if j >= MAX_LOOPING {
 				i += 1;
 				continue 'first;	//reset i to 0
@@ -1062,7 +1066,7 @@ A `while` loop is a loop that ends when its condition is not fulfilled anymore (
 
 This behavior can be reproduced with a `loop` loop but is less readable:
 ```rust
-loop{
+loop {
 	if !condition {
 		break;
 	}
@@ -1078,7 +1082,7 @@ while condition {
 
 Let's say we want to do a count down, we could do this:
 ```rust
-fn main(){
+fn main() {
 	let mut it_left = 10;
 	while it_left > 0 {
 		println!("{it_left}!");	//definitly not factorials
@@ -1089,7 +1093,7 @@ fn main(){
 ```
 
 ##### 3.5.3.5. The `for` loop
-To be more precise, it would be a `forin` loop which is the equivalent of `foreach` loops in other languages (like Cs or PHP).
+To be more precise, it would be a `forin` loop which is the equivalent of `foreach` loops in other languages (like Cs or PHP). It is the same as in Python.
 
 Here's its syntax:
 ```rust
@@ -1114,7 +1118,7 @@ VS
 {
 	let (mut) arr : [type; ARRAY_LENGTH] = //an array
 	let mut i = 0;
-	loop{
+	loop {
 		if i >= ARRAY_LENGTH {	//we assume that ARRAY_LENGTH has already been defined
 			break;
 		}
@@ -1127,7 +1131,7 @@ VS
 
 We can refactor our countdown code with a for loop:
 ```rust
-fn main(){
+fn main() {
 	for count in (1..=10).rev() {	//the method .rev() reverses the list
 		println!("{count}!");
 	}
@@ -1169,7 +1173,7 @@ Do you remember the scopes from when we talked about them being expression? If n
 
 demonstration:
 ```rust
-fn main(){
+fn main() {
 	{
 		let my_var = 42;
 		{
@@ -1190,7 +1194,7 @@ We've already seen the string literals earlier (remeber it's the double-quoted s
 
 You can convert any string literal to a `String` object with `String::from`:
 ```rust
-fn main(){
+fn main() {
 	let str = String::from("str litteral");
 }
 ```
@@ -1198,7 +1202,7 @@ The double colon `::` is to indicate that the method `::from()` is in the string
 
 This kind of string can be mutated:
 ```rust
-fn main(){
+fn main() {
 	let mut str = String::from("Hello");
 	str.push_str(" world!");
 
@@ -1216,7 +1220,7 @@ The `String`s aren't hard-coded and can change in the program, to do this they a
 I can see some people not understanding in the back and say this program compiles:
 <span id="anchor431"></span>
 ```rust
-fn main(){
+fn main() {
 	let mut my_str = "Hi!";
 	println!("{my_str}");
 
@@ -1230,7 +1234,7 @@ The role of the `String::from()` method is to allocate memory for the `String` o
 Rust differentiate because where in C you'd have to call `free(var)` after allocate it with `malloc(sizeof(var))`, Rust automates it and free the memory when a variable is out-of-scope:
 
 ```rust
-fn main(){
+fn main() {
 	{
 		let var = String::from("str"); //allocates memory for var
 
@@ -1249,13 +1253,13 @@ _Note from the Book: "In C++, this pattern of deallocating resources at the end 
 Let's compare those two pieces of code:
 <span id="anchor414"></span>
 ```rust
-fn main(){
+fn main() {
 	let x = 5;
 	let y = x;
 }
 ```
 ```rust
-fn main(){
+fn main() {
 	let s1 = String::from("I love strings!");
 	let s2 = s1;
 }
@@ -1266,7 +1270,7 @@ As you can see on the image I stole from the Book the `s1` variable
 contains a _pointer_, a length and a capacity, the pointer _points_ on the string value. When we copy `s1`'s value we don't copy the array of chars, we copy thepointer, length, and capacity of `s1`.
 
 <style>
-	img{
+	img {
 		max-width: 40px; /*doesn't work, idk why*/
 		max-heigth: 40px; /*doesn't work, idk why*/
 	
@@ -1280,7 +1284,7 @@ A C++ equivalent would be this:
 ```C++
 #include <string>
 
-int main(void){
+int main(void) {
 	std::string  s1 = "hello";
 	std::string& s2 = s1;
 	
@@ -1297,7 +1301,7 @@ And would be very memory-consuming, especially on heavy  and large pieces of dat
 When you try to free a pointer already freed it produces an error. When assigning `s2` to `s1`, Rust invalidates `s1` so when freeing the variables it doesn't panics.  
 That's what's happennig in the code below:
 ```rust
-fn main(){
+fn main() {
 	let s1 = String::from("hello");
 	let s2 = s1;	//invalidates s1
 
@@ -1312,7 +1316,7 @@ The book defines _moving a variable_: _"If you’ve heard the terms shallow copy
 If you _do_ to deep copy the heap data, you'll have to use the `.clone()` method to copy the data and have in memory the same pattern as in the previous image.
 
 ```rust
-fn main(){
+fn main() {
 	let s1 = String::from("hello");
 	let s2 = s1.clone();	//copy s1
 
@@ -1323,7 +1327,7 @@ fn main(){
 ##### 4.1.5.2. Copying data on the stack
 Now let's go back to the [first program of 4.1.4.](#anchor414):
 ```rust
-fn main(){
+fn main() {
 	let x = 5;
 	let y = x;
 }
@@ -1339,15 +1343,15 @@ What does implement the `Copy` trait? To get a complete answer go check [the doc
 ##### 4.1.6.1. ...arguments
 Passing a value to a function is similar to defining a variable, it can lead to unsettling results to the untrained programmer:
 ```rust
-fn copying(x : usize){	//copy argument to x
+fn copying(x : usize) {	//copy argument to x
 	println!("Here's my copied argument: {x}!");
 }	//x is freed but nothing else happens
 
-fn moving(s : String){	//move the argument to `s`
-	println!("Here's my moved argument: '{s}'!");
+fn moving(s : String) {	//move the argument to `s`
+	println!("Here's my moved argument: ' {s}'!");
 }// free `s`, so the argument's address
 
-fn main(){
+fn main() {
 	let my_string = String::from("XSS attack!'!   It may seem I can write where it is not 'intended");
 	moving(my_string);  //out-> "Here's my moved argument: 'XSS attack!'!   It may seem I can write where it is not 'intended'!"
 	//can't use `my_string` anymore
@@ -1361,15 +1365,15 @@ fn main(){
 ##### 4.1.6.2. ...return values
 Returns values can also be moved:
 ```rust
-fn give_ownership() -> String{
+fn give_ownership() -> String {
 	String::from("It's yours now")
 }
 
-fn takes_and_give_back(to_move : String) -> String{
+fn takes_and_give_back(to_move : String) -> String {
 	to_move
 }
 
-fn main(){
+fn main() {
 	let new_owner = give_ownership();		//the value "It's yours now" is moved to `new_owner`
 
 	let present = String::from("Happy Christmas!");
@@ -1383,7 +1387,7 @@ fn main(){
 What if we wanted to return something else than parameters just to get back the ownership?  
 One solution is to return a tuple:
 ```rust
-fn get_length_and_ownership(s : String) -> (usize, String){
+fn get_length_and_ownership(s : String) -> (usize, String) {
 	//tuple on mutiples lines
 	(
 		s.len(),	//gives the length of the string
@@ -1391,7 +1395,7 @@ fn get_length_and_ownership(s : String) -> (usize, String){
 	)
 }
 
-fn main(){
+fn main() {
 	let former_owner = String::from("House");
 
 	let (length, new_owner) = get_length_and_ownership(former_owner);	//unpacking
@@ -1408,11 +1412,11 @@ What's a reference you say? The Book define them like this: "_A reference is lik
 In Rust, references are in the syntax `&var` with `var` a defined variable, we already saw them in our first project (chapter 2).  
 We can rewrite our program:
 ```rust
-fn get_length(s : &String) -> usize{
+fn get_length(s : &String) -> usize {
 	s.len()
 }	//s goes out of scope but since it didn't have ownership in the first place, nor is it dropped	
 
-fn main(){
+fn main() {
 	let owner = String::from("House");
 	let length = get_length(&owner);
 
@@ -1430,12 +1434,12 @@ As the variables are, references are immutable by default (that's why we put a `
 
 Here's an example of how to change a variable with references:
 ```rust
-fn put_a_new_line(txt : &mut String){
+fn put_a_new_line(txt : &mut String) {
 	//modifying `txt`
 	txt.push_str("\r\n");	//We're placing a CRLF for windows users
 }
 
-fn main(){
+fn main() {
 	let mut txt1 = String::from("I am text 1!");
 	let txt2 = "I am text 2!";
 	put_a_new_line(&mut txt1);	//`txt1` is modified
@@ -1448,18 +1452,18 @@ fn main(){
 
 Remember that Rust does not allow more that **1 mutable reference**, you can put as many immutable references as you want but there can only be one mutable reference at each given time:
 ```rust
-fn main(){
+fn main() {
 	//setting as mutable else cannot asign mutable refs
 	let mut some_var = String::from("This could be heaven, this could be hell");
 
 	let hotel = &some_var;
 	let such_a_lovely_place = &some_var;
 	let such_a_lovely_face = &some_var;
-	println!("{hotel},\n{such_a_lovely_place},\n{such_a_lovely_face}"); //prints 3 times some_var separated by new line (not on windows)
+	println!("{hotel},\n {such_a_lovely_place},\n {such_a_lovely_face}"); //prints 3 times some_var separated by new line (not on windows)
 
 	let never_leaving = &mut some_var;
 	let check_at_any_time = &mut some_var;	//compile error
-	println!("{never_leaving}\n{check_at_any_time}");
+	println!("{never_leaving}\n {check_at_any_time}");
 }
 ```
 
@@ -1484,7 +1488,7 @@ println!("{}, {}, and {}", r1, r2, r3);	//references used after the muatble ref 
 
 but this one does:
 ```rust
-fn main(){
+fn main() {
 
 	//setting as mutable else cannot asign mutable refs
 	let mut some_var = String::from("This could be heaven, this could be hell");
@@ -1504,7 +1508,7 @@ fn main(){
 A dangling reference is a reference that points to a freed adress in memory, 
 for example:
 ```rust
-fn main(){
+fn main() {
 	let dangling_ref : &String = {		//produces an error
 		let var = String::from("hallo");
 
@@ -1524,7 +1528,7 @@ The Book gives this exercise: "_Write a function that takes a string of words se
 
 I created a function `unit_test()` to help you test your script:
 ```rust
-fn unit_test(s : &str){	
+fn unit_test(s : &str) {	
 	println!("'{}'", first_word_ref(&String::from(s)));
 }
 ```
@@ -1536,10 +1540,10 @@ _____
 
 Here's my try:
 ```rust
-fn first_word(txt : String) -> String{	//takes ownership (I forgot about this)
+fn first_word(txt : String) -> String {	//takes ownership (I forgot about this)
 	let mut buffer : String = String::from("");	//declaring a buffer to store the word
-	for letter in txt.chars(){	//iterates `txt` letter by letter (found `.chars()` thanks to the complier's hints)
-		if letter == ' '{		//verify if the current character is a space
+	for letter in txt.chars() {	//iterates `txt` letter by letter (found `.chars()` thanks to the complier's hints)
+		if letter == ' ' {		//verify if the current character is a space
 			break;	//at first I wanted to return with the loop but for loops can't return anything
 		}
 		buffer.push_str(&String::from(letter));	//adding `letter` to buffer
@@ -1571,7 +1575,7 @@ Take this program:
 ```rust
 //we consider `first_word()` already defined
 
-fn main(){
+fn main() {
 	let mut my_str = String::from("This text is ugly!");	//-> 4
 	let my_first = first_word(&my_str);
 	my_str.clear(); //empties the string like ```my_str = String::from("");``` would
@@ -1584,7 +1588,7 @@ fn main(){
 
 Now imagine a function `second_word()` (you can write but there will not be any correctiuon), its definition would look like:
 ```rust
-fn second_word(txt : String) -> (usize, usize){ //...
+fn second_word(txt : String) -> (usize, usize) { //...
 ```
 It would return two ints but not linked to data at all, we'd have to update them manually if `txt` would've changed.
 
@@ -1615,7 +1619,7 @@ ____________________________________
 
 My try:
 ```rust
-fn first_word(txt : &String) -> &str{
+fn first_word(txt : &String) -> &str {
 	for (i, &item) in txt.as_bytes().iter().enumerate() {	//see 1. of previous exercise
 		if item == b' ' {			//verify is current char is a space
 			return &txt[..i];		//returns correct sequence (without the ' ' char)
@@ -1634,7 +1638,7 @@ Now remember the program we made in [4.3.1.](#anchor431), now it does not compil
 ```rust
 //we consider `first_word()` already defined
 
-fn main(){
+fn main() {
 	let mut my_str = String::from("This text is ugly!");	//-> 4
 	let my_first = first_word(&my_str);
 
@@ -1648,14 +1652,14 @@ If you remember last section; when a mutable reference is created, there cannot 
 
 A more experienced programmer would not have written the function `first_word()` as we did, he would have made the parameter a Slice too:
 ```rust
-fn first_word(txt : &str) -> &str{
+fn first_word(txt : &str) -> &str {
 ```
 
 It lets us pass only a part of the string, for example:
 ```rust
 // definiion of `first_word()`
 
-fn main(){
+fn main() {
 	let original_string = String::from("All I want for christmas is Rust.");
 
 	let word = first_word(&original_string[..]);
@@ -1672,14 +1676,14 @@ fn main(){
 #### 4.3.3. Other slices
 There's other `Slices` that `&str`s, it works with arrays (and many other types):
 ```rust
-fn main(){
+fn main() {
 	let arr = [1, 2, 3, 4, 5];
 
 	let arr_slice = &arr[2..];
 
 	// This code prints `arr_slice`
 	print!("[");				// The macro `print!()` is the same as `println!()` but doesn't insert a new line '\n' at the end of the string
-	for number in arr_slice{	//out-> "[3, 4, 5]"
+	for number in arr_slice {	//out-> "[3, 4, 5]"
 		print!("{number}, ");
 	}
 	println!("\u{0008}\u{0008}]");	// The character '\u{0008}' is the equivalent of the '\b' character. 
@@ -1706,7 +1710,7 @@ Structures are like tuples as we talk in [sub-section 3.2.2.1.](#3221-tuples), t
 
 To define a structure, we follow this syntax:
 ```rust
-struct StructName{
+struct StructName {
 	field1: type1,
 	field	2: type2,
 	//...
@@ -1747,7 +1751,7 @@ We can declare the instance `strandmon` as mutable but we cannot choose for cert
 #### 5.1.2. Building instances from a function
 We can define a function returning a `Chair` object:
 ```rust
-fn build_soft_chair(name : &String, dimensions : (u8, u8, u8)) -> Chair{
+fn build_soft_chair(name : &String, dimensions : (u8, u8, u8)) -> Chair {
 	Chair {
 		name: name,
 		number_of_legs: 4,
@@ -1758,7 +1762,7 @@ fn build_soft_chair(name : &String, dimensions : (u8, u8, u8)) -> Chair{
 ```
 It only make sense to name the parameters the same name the struct does. But we developpers are lazy people and can't write two times the same name so Rust's devs added a shorthand: if the two names are the same, we just can write it once:
 ```rust
-fn build_soft_chair(name : &String, dimensions : (u8, u8, u8)) -> Chair{
+fn build_soft_chair(name : &String, dimensions : (u8, u8, u8)) -> Chair {
 	Chair {
 		name,
 		number_of_legs: 4,
@@ -1773,7 +1777,7 @@ If you already programmed orientated object you must be waiting for how we defin
 What if a chair has the same properties as `strandmon` but just another name?  
 We would have to write this thing ?
 ```rust 
-fn main(){
+fn main() {
 	let strandmon = build_soft_chair(&String::from("STRANDMON"), (82, 96, 101));
 	let original_chair = Chair {			
 		name : String::from("STALMON"),
@@ -1787,7 +1791,7 @@ or we'd have to write a function?
 
 No we would not have to. I as I said, devs are lazy so the Rust team created a faster way:
 ```rust
-fn main(){
+fn main() {
 	let strandmon = build_soft_chair(&String::from("STRANDMON"), (82, 96, 101));
 	let original_chair = Chair {			
 		name : String::from("STALMON"),
@@ -1805,7 +1809,7 @@ Here's an example of tuples structs:
 struct Point3D (f32, f32, f32);
 struct Vector3D(f32, f32, f32);
 
-fn main(){
+fn main() {
 	let origin   = Point3D (0.0, 0.0, 0.0);
 	let zero_vec = Vector3D(0.0, 0.0, 0.0);
 }
@@ -1819,7 +1823,7 @@ Here is how to define unit-like structs:
 ```rust
 struct UnitLike;
 
-fn main(){
+fn main() {
 	let some_var = unit_like;
 }
 ```
@@ -1835,7 +1839,7 @@ struct DoNotOwn {
 	heap2: &String
 }
 
-fn main(){
+fn main() {
 	let if_buying = DoNotOwn {
 		heap1: &String::from("Gaming"),
 		heap2: &String::from("isn't stealing"),
@@ -1856,7 +1860,7 @@ ______
 
 #### 5.2.1. Our first try: simple variables
 ```rust
-fn area(width : f32, heigth : f32) -> f32{
+fn area(width : f32, heigth : f32) -> f32 {
 	width * heigth
 }
 
@@ -1874,7 +1878,7 @@ ______
 
 #### 5.2.2. Our second try: tuples
 ```rust
-fn area(rect : (f32, f32)) -> f32{
+fn area(rect : (f32, f32)) -> f32 {
 	rect.0 * rect.1
 }
 
@@ -1896,7 +1900,7 @@ struct Rect {
 	height : f32,
 }
 
-fn area(rect : &Rect) -> f32{
+fn area(rect : &Rect) -> f32 {
 	rect.width * rect.height
 }
 
@@ -1973,7 +1977,7 @@ struct Rect {
 
 // Definitions of methods
 impl Rect {
-	fn area(&self) -> f32{	// The `self` argument represents the instance calling the method
+	fn area(&self) -> f32 {	// The `self` argument represents the instance calling the method
 		self.width * self.height
 	}
 }
@@ -2051,7 +2055,7 @@ ______
 
 The solution is quite simple:
 ```rust
-fn can_hold(&self, rect : &Rect) -> bool{
+fn can_hold(&self, rect : &Rect) -> bool {
 	self.width > rect.width && self.height > rect.height
 }
 ```
@@ -2068,7 +2072,7 @@ Now an example:
 impl Rect {
 	//[def `can_hold()` and `area()`]
 
-	fn new(width : f32, height : f32) -> Self{	//shorthand
+	fn new(width : f32, height : f32) -> Self {	//shorthand
 		Self {
 			width,
 			height,
@@ -2165,7 +2169,7 @@ enum IPAddr {
 	v6(String),
 }
 
-fn main(){
+fn main() {
 	let localhost = IPAddr::v4(String::from("127.0.0.1"));
 	let loopback  = IPAddr::v6(String::from("::1"));
 }
@@ -2231,7 +2235,7 @@ impl Message {
 	}
 }
 
-fn main(){
+fn main() {
 	let m1 = Message::Write(String::from("Hello!"));
 	let m2 = m1.get();
 }
@@ -2273,7 +2277,7 @@ You can go [chapter 10.](#10-) to have a better definition.
 
 If you want to have a variable of type `Option`, you can do:
 ```rust
-fn main(){
+fn main() {
 	let some_bool : Option<bool> = Option::Some(true);	//staticly typing
 	let some_int = Option::Some(89);					//dynamicly typing
 
@@ -2383,7 +2387,7 @@ fn value_in_cents(coin: Coin) -> u8 {
 }
 
 //tests
-fn main(){
+fn main() {
 	println!("The value of a penny  is {}.",   value_in_cents(Coin::Penny ));
 	println!("The value of a nickel is {}.",   value_in_cents(Coin::Nickel));	
 	println!("The value of a dime   is {}.\n", value_in_cents(Coin::Dime  ));//writing a new line to well see what is printed
@@ -2400,13 +2404,13 @@ We're assuming the result can be represented as an `Option<isize>` so do not wor
 _______
 
 ```rust
-fn multiply_by_two(n : Option<isize>) -> Option<isize>{
+fn multiply_by_two(n : Option<isize>) -> Option<isize> {
 	match n {
 		None => None,			//returns None if None is passed
 		Some(x)	=> Some(x * 2),	//returns x*2 if Some is passed
 	}
 }
-fn main(){
+fn main() {
 	let number			= Some(345);				//-> Some(345)
 	let can_be_number	= multiply_by_two(number);	//-> Some(690)
 	let none			= multiply_by_two(None);	//-> None
@@ -2427,7 +2431,7 @@ The code should look like this:
 ```rust
 //[definition of `get_new_hat()`, `loose_hat()` and `reroll_dice()`]
 
-fn main(){
+fn main() {
 	let dice_roll = 8;		//it's random the first time
 
 	match dice_roll {
@@ -2443,7 +2447,7 @@ Now let's hire a better game designer, he tells us to make our character move by
 ```rust
 //[definition of `get_new_hat()`, `loose_hat()` and `move_player()`]
 
-fn main(){
+fn main() {
 	let dice_roll = 2;		//see it changed!
 
 	match dice_roll {
@@ -2462,7 +2466,7 @@ In order to do this you have to return the unit value `()` if another number tha
 ```rust
 //[definition of `get_new_hat()`, `loose_hat()` and `move_player()`]
 
-fn main(){
+fn main() {
 	let dice_roll = 2;		//see it changed!
 
 	match dice_roll {
@@ -2506,7 +2510,7 @@ We can add an `else if` and `else` to an `if let` block, it replaces the placeho
 ```rust
 //you alredy saw the definition of `UsState`
 #[derive(Debug)]
-enum EUCountry{
+enum EUCountry {
 	France,
 	Italy,
 	Belgium,
@@ -2520,13 +2524,13 @@ enum Coin {
 	Euro(EUCountry),		
 }
 
-fn main(){
+fn main() {
 	//`user_input` is a `Coin` variant
 	if let Coin::Quarter(input) = user_input {
 		println!("Your coin is from the american state \"{input:?}\".");
 	}else if let Coin::Euro(input) = user_input {
 		println!("Your coin is from \"{input:?}\"");
-	}else{
+	}else {
 		println!("We cannot determine from which american state this coin is.");
 	}
 }
@@ -2900,7 +2904,7 @@ mod Languages {
 	}
 	pub mod Bash {
 		pub mod Function {
-			pub fn execute(){}
+			pub fn execute() {}
 		}
 	}
 }
@@ -2935,3 +2939,124 @@ Remember that `use` isn't an `import` nor an `#include`, all it does is create s
 Rust allow splitting your code in multiples files and modules (namespaces). If an element is from anther file you don't have to import it, you can use an absolute path. In order to avoid always using long paths, you can use the `use` feature. All members of a module are private by default but you can write `pub` before their declaration to make them public.
 
 ## 8. Common Collections
+Collections are, as their name suggest, collections of values. They are all stored on the heap so they can grow and shrink overtime unlike strings and tuples.  
+This chapter is about the most common ones:
++ *vector*s that are the most similar to arrays.
++ *string*s that are collections of chars.
++ *hash map*s that let you bind a key to a value and their more general form _maps_.
+
+If you have questions, you can see the [documentation](https://doc.rust-lang.org/std/collections/index.html).
+
+### 8.1. Storing Lists of Values with Vectors
+The type of vectors is _`Vec<T>`_, as a remainder the `<T>` indicate that `Vec` uses generics (templates) which can be any type. You can see vectors as arrays that can grow and shrink.
+
+#### 8.1.1. Vector basics
+In order to create a vector, there is two syntaxes:
+```Rust
+let empty : Vec<char> = Vec::new();				//mandatory type annotation
+let full  : Vec<char> = vec!['a', 'b', 'c'];
+```
+
+The first one uses the `Vec::new()` method to create an empty vector, you have to annotate the type of `empty` because of static type checking: Rust doesn't know what is the type of `empty` since it could be `Vec<u32>`, `Vec<f64>` or even `Vec<[char; 4]>`.  
+The second one uses the `vec!` macro, it doesn't require type annotation since `'a'`, `'b'` and `'c'` can only be chars.
+
+
+You can push new values at the end of vectors with the `Vector.push()` method:
+```Rust
+let mut squares : Vec<u32> = Vec::empty();
+
+squares.push(1);
+squares.push(4);
+squares.push(9);
+squares.push(16);
+squares.push(25);
+```
+
+To access the values of a vector, you can use brackets like for arrays or the `Vec.get()` method:
+```Rust
+let pseudo_str : Vec<char> = vec!['H', 'e', 'l', 'l', 'W'];
+
+let win		: char  =  pseudo_str[4];		//->'W'
+let win_ref	: &char = &pseudo_str[4];		//->'W'
+
+let loss	: Option<&char> = pseudo_str.get(3);
+match loss {
+	Some(ch) => println!("The element to index 3 is ' {}'.", ch),
+	None	 => println!("There is no element at index 3."),
+}	//out->The element to index 3 is 'l'.
+
+let lost	: Option<&char> = pseudo_str.get(42);	//Out of Bounds
+match lost {
+	Some(ch) => println!("The element to index 42 is ' {}'.", ch),
+	None	 => println!("There is no element at index 42."),
+}	//out->There is no element at index 42.
+```
+
+The difference between brackets and `get()` is that `get()` returns `None` if the index is out of bound whereas brackets will cause the program to panic:
+```Rust
+let pseudo_str : Vec<char> = vec!['H', 'e', 'l', 'l', 'W'];
+
+pseudo_str.get(24);		//->None
+pseudo_str[24];			//error
+```
+
+
+<!--Already?-->
+Remember the borrow checker? I hope so because [references](#42-borrowing-and-references) rules still hold:
+```Rust
+let mut v = vec![9, 8, 7, 6, 5];
+let no = &v[0];
+
+v.push(4);		//compile error, v is borrowed as a mutable reference
+
+println!("{} is my favorite number!", no);
+```
+
+If you want how the `Vec` type works under the hood, you can see [this guide](https://doc.rust-lang.org/nomicon/vec/vec.html) that shows how to build the type from scratch.
+
+#### 8.1.2. Iterating over a vector
+If we want to iterate over a vector , we have to use a [`for`](#3535-the-for-loop) loop.
+```Rust
+let warudo = vec!['T', 'H', 'E', ' ', 'W', 'O', 'R', 'D', '!'];
+for character in &warudo {
+	print!("{character}");
+}		//out->"THE WORD!"
+```
+
+We can also change vector's elements with mutable references:
+```Rust
+let mut song = vec!["Stayin", "' ", "Alive"];
+for word in &mut song {
+	*word = "Ha! ";
+	print!("{word}");
+}	//out-> "Ha! Ha! Ha! "
+
+//song == vec!["Ha! ", "Ha! ", "Ha! "]
+```
+
+#### 8.1.3. Multiple types
+Vectors can only contain one type but you can enums to bypass this limit:
+```Rust
+enum Number {
+	Int(i32),
+	Float(f32),
+	NaN,
+}
+
+let heterogen = vec![
+	Number::Int(6),
+	Number::Float(9.6),
+	Number::NaN
+];
+```
+
+#### 8.1.3. Deleting a vector
+Deleting a vector will free all of its elements, any reference will produce an error by the borrow checker:
+```Rust
+{
+	let boring_vec = vec![1, 2, 3];
+	//...
+}  // boring_vec is out of scope here
+```
+
+### 8.2. Storing UTF-8 Encoded Text with Strings
