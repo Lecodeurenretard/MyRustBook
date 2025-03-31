@@ -2556,37 +2556,26 @@ We'll also cover encapsulation which is a OOP concept that let you hide or forbi
 
 We will also talk about scopes and how to resolve conflicting names. Those scopes aren't those from your code which are defined by curly brackets `{}`, they are scopes inside project hierarchy.
 
-Before starting let's see some definitions:  
-<!--<dl>
-	<dt>The module system:</dt>
-	<dd>This system is the one containing all the features that lets organize your code, it contains all the feature listed below.</dd>
-	<dt>Packages:</dt>
-	<dd>A way provided by Cargo to build, test and share crates.</dd>
-	<dt>Crates</dt>
-	<dd>A tree of modules that produces once compiled an executable or a library (binary and library crates)</dd>
-	<dt>Modules (and <code>use</code>):</dt>
-	<dd>Rust feature that lets you control the organization of your code and use paths</dd>
-	<dt>Paths:</dt>
-	<dd>A way to name items like structures, function or modules.</dd>
-</dl>-->
-##### The module system:	<!--I know this is bad practice-->
+Before starting let's see some definitions:
+
+
+**The module system:**  
 This system is the one containing all the features that lets organize your code, it contains all the feature listed below.
 
-##### Packages:
+**Packages:**  
 A way provided by Cargo to build, test and share crates.
 
-##### Crates:
+**Crates:**  
 A tree of modules that produces once compiled an executable or a library (binary and library crates).
 
-##### Modules (and `use`):
+**Modules (and `use`):**  
 Rust feature that lets you control the organization of your code and use paths.
 
-##### Paths:
+**Paths:**  
 A way to name items like structures, function or modules.
 
 ### 7.1. Packages and crates
-Crates are the smallest piece of code the compiler can handle, even our very first project is considered a crate.  
-There are two types of crates:
+Crates are the smallest piece of code the compiler can handle, even our very first project is considered a crate. There are two types of crates:
 - Binary crates: A program that can run, all the crates we've created are binary crates.
 - Library crates: A crate that provides functions, types, .... They don't have any `main()` functions and cannot compile to an executable by themselves, they need to be included by an binary crate to be used. When informal, rustacean use the word "crate" to imply "library crate", they use this word as a synonym of the concept of libraries in other programming languages.
 
@@ -2720,26 +2709,16 @@ Using the `super` keyword is equivalent of using `..` in a filepath, it elevate 
 mod front_of_house {
 	mod hosting {
 		fn add_to_waitlist() {}
-
 		fn seat_at_table() {}
 
 		fn new_client() {
 			add_to_waitlist();
-
 			super::do_nothing();
 			//If we wanted to use an absolute path we'd have to write this:
 			//crate::front_of_house::do_nothing()
 			
 			seat_at_table();
 		}
-	}
-
-	mod serving {
-		fn take_order() {}
-
-		fn serve_order() {}
-
-		fn take_payment() {}
 	}
 
 	fn do_nothing() {}
@@ -2945,3 +2924,14 @@ use Language::*;
 Although you can do it, it doesn't mean you should since with operator you can't see the names you are importing which can lead to name confilcts and a less readable code.
 
 ### 7.5. Separating Modules into Different Files
+All of this is great but what if we want to code on multiple files? We did mention this in our [cheatsheet](#721-modules-cheat-sheet), it is the notation with the semicolon `;`:
+```Rust
+mod File;		//The compiler will look in src/File.rs and in src/File/mod.rs
+```
+
+Remember that `use` isn't an `import` nor an `#include`, all it does is create shorthands and reducing paths. We could not write `use` and access the function with an [absolute path](#731-what-is-a-path).
+
+### 7.summary
+Rust allow splitting your code in multiples files and modules (namespaces). If an element is from anther file you don't have to import it, you can use an absolute path. In order to avoid always using long paths, you can use the `use` feature. All members of a module are private by default but you can write `pub` before their declaration to make them public.
+
+## 8. Common Collections
