@@ -1093,7 +1093,7 @@ fn main() {
 ```
 
 ##### 3.5.3.5. The `for` loop
-To be more precise, it would be a `forin` loop which is the equivalent of `foreach` loops in other languages (like Cs or PHP). It is the same as in Python.
+It is like a `foreach` loops in other languages (like Cs or PHP) but is same as in Python.
 
 Here's its syntax:
 ```rust
@@ -1188,14 +1188,14 @@ We just demonstrated rule number 2.
 
 **16/11**
 #### 4.1.2. The `String` type
-To better illustrate ownership we need a type more complex than those in [section 3.1.](#31-variables) which can be stored on the stack (except tuples). In this sub-section we'll only discuss of the parts which relate to ownership, the rest will be seen section [8.2.](#82-).
+To better illustrate ownership we need a type more complex than those in [section 3.1.](#31-variables) and that can be stored on the stack. In this sub-section we'll only discuss of the parts which relate to ownership, the rest will be seen in [section 8.2.](#82-storing-utf-8-encoded-text-with-strings).
 
-We've already seen the string literals earlier (remeber it's the double-quoted strings `"hello!"`) but they can be not suitable for every projects because firstly they are immutable and secondly you cannot know all the text (ie: the name of a user).  
+We've already seen the string literals earlier (remember it's the double-quoted text `"hello!"`) but they can be not suitable for every usage because they are immutable.  
 
 You can convert any string literal to a `String` object with `String::from`:
 ```rust
 fn main() {
-	let str = String::from("str litteral");
+	let s = String::from("str literal");
 }
 ```
 The double colon `::` is to indicate that the method `::from()` is in the string namespace/class (wait [section 5.3.](#53-methods)).
@@ -1203,14 +1203,14 @@ The double colon `::` is to indicate that the method `::from()` is in the string
 This kind of string can be mutated:
 ```rust
 fn main() {
-	let mut str = String::from("Hello");
-	str.push_str(" world!");
+	let mut s = String::from("Hello");
+	s.push_str(" world!");
 
-	println!("{str}"); //out-> "Hello world!"
+	println!("{s}"); //out-> "Hello world!"
 }
 ```
 
-You may be asking yourself _"Why can't string literals change value but `String`s can ?"_, this is because of how the two types are allocated in memory.
+You may be asking yourself _"Why can't string literals change value but `String`s can ?"_, this is because of the manner the two types are allocated in memory which is precisely the purpose of the next sub-section.
 
 #### 4.1.3. Memory and allocation
 The string literals are fast, this is because the compiler knows them at compile time are they are directly in the final executable hence the fact those cannot change in the program.  
@@ -1228,7 +1228,7 @@ fn main() {
 	println!("{my_str}");
 }
 ```
-And it does however the string literal `"Hi!"` does not change, only the value of `my_var` does and the literal `"Hi!"` is gone in the void of your RAM when we set `"Hello"` to `my_var`.
+It sure does however the string literal `"Hi!"` does not change, only the value of `my_var` does and the literal `"Hi!"` is gone in the void of your RAM when we set `"Hello"` to `my_var`.
 
 The role of the `String::from()` method is to allocate memory for the `String` object similary to all programing languages.  
 Rust differentiate because where in C you'd have to call `free(var)` after allocate it with `malloc(sizeof(var))`, Rust automates it and free the memory when a variable is out-of-scope:
@@ -1240,7 +1240,7 @@ fn main() {
 
 		//do stuff
 	}
-	// the variable var is now out-of-scope so the space String::from allocated is freed
+	// the variable var is now out-of-scope so the space allocated by String::from is freed
 	// you can no longer call var
 }
 ```
@@ -1424,7 +1424,7 @@ fn main() {
 }
 ```
 
-_note: If you can **reference** with an ampersand `&`, you can **dereference** with an asterix `*` the same way you'd reference. We'll dereference in [chapter 8.](#8-) and we will see the complete picture with [chapter 15.](#15-)._
+_note: While you can **reference** with an ampersand `&`, you can also **dereference** with an asterix `*` the same way you'd reference. We'll dereference in [chapter 8.](#8-) and we will see the complete picture with [chapter 15.](#15-)._
 
 **17/11**
 The action of creating a reference is called _borrowing_ because the reference doesn't own the value (like you'd borrow a book).
@@ -1594,27 +1594,33 @@ It would return two ints but not linked to data at all, we'd have to update them
 
 Fortunaly, Rust has a built-in that we can use: Slices.
 
-#### 4.3.2. Introduction to `String` Slices
-A _string slice_ is a reference to a part of a `String`, it looks like this:
+#### 4.3.2. Introduction to string slices
+A _string slice_ is like a reference to a part of a `String`, it looks like this:
 ```rust
 let alphabet = String::from("abcdefghijklmnopqrstuvwxyz");
 
 let fast   = &alphabet[11..16]; //-> "lmnop"
-let melody = &alphabet[16..22]; //-> "qrstuv	"
+let banger = &alphabet[16..22]; //-> "qrstuv"
 ```
 
-The sequences part of a string, they only need 2 variables, their start position (`11 + alphabet.begin()` for `lmnop`) and their length.
+String slices only need 2 variables, their start position and their length. Below is shown a diagram of string slices in memory.
 
 <img src="https://doc.rust-lang.org/book/img/trpl04-06.svg" alt="a representation of a string `s` and a sequence `world`" />
 
-In this case the `s` is defined with `let s = "hello world"` and `let world = &s[6..11]`.
+This is produced by the program:
+```Rust
+let s1 : str = "hello";
+let s : &str = &s1;
+```
 
 _note: if your slice begin at `0`, the first `0` is falcutative: `&s[..5]` is valid.  
 By the same logic, if you want to take until the last character of the string, the second number is not required: `&s[6..]` and `&s[..]` are valid._
 
-Now you know this go rewrite your `first_word()` function (you'll have to return a reference to a `str` due to string Slices being represented by the type `&str`).  
-Hence the definition of your function should be:
-`fn first_word(txt : &String) -> &str {`
+Now you know this go rewrite your `first_word()` function (you'll have to return a reference to a `str` due to string slices being represented by the type `&str`).  
+The first line of your function's definition should then be:
+```Rust
+fn first_word(txt : &String) -> &str {
+```
 ____________________________________
 
 My try:
@@ -1997,28 +2003,27 @@ fn main() {
 To create a method we first create the `impl` block (for implementation block). All defifnition inside this block will be associated to the `Rect` structure.  
 We then define the `.area()` method with the `self` argument, like in Python the `self` parameter represents the object calling this method, it is passed by reference to avoid loss of ownership. This argument is always the first one.  
 In order to call the `.area()` method, we use the dot notation. Note that we do not need to manually pass `self` to the method.
+<!--The 2000^th^ line! at this rate this document will have above 10,000 at the end-->
 
 In the definition of `.area()` we do not specify a type, that's because `&self` is a shorthand to `self: &Self`, in a `impl` block the `Self` type is an alias to the structure related to the block (here the `Rect` structure).
 
 In a method definition, you can take the ownership of `self`, it is typically used when using `mut self` to transform the instance and stopping the method's user to use the old version of the instance.
 
-It is legal to name a method and a field the same name, in most cases you will want to do this as when the method is a _getter_ to the field, that's to say the function only returns the value of the field and do nothing else. It will make more sense to define getter when we will get access to private fields in [chapter 7.](#7) ([7.2](#72-) by looking the titles).
+It is legal to name a method and a field the same name, in most cases you will want to do this as when the method is a _getter_ to the field, that's to say the function only returns the value of the field and do nothing else. It will make more sense to define getters when we will get access to private fields in section [7.2](#72-defining-modules-to-control-scope-and-privacy).
 
 #### 5.3.2. Is there a `->` operator ?
-In Cs you have the `->` operator and the `.` operator which do essensially the same thing but `ptr->value` is a shorthand to `(*ptr).value` where `ptr` is a pointer to an object or a pointer to a method (the `*` operator has not the same role as in Rust).
+In Cs you have the `->` operator and the `.` operator which do essensially the same thing but `ptr->value` is a shorthand to `(*ptr).value` where `ptr` is a pointer to an object.
 
 In Rust, there's no such thing. Instead there is a feature called: _automatic referencing and dereferencing_ which handles the hard work for us.  
 Those two lines are the same:
 
-
-<!--The 2000^th^ line! at this rate this document will have above 10,000 at the end-->
 ```rust
 p1.method(&p2);
 (&p1).method(&p2);
 ```
 where in C++ you would have to:
 ```C++
-ptr1.method(ptr2);	//crashes because C++ pointers can't have attribute/method
+ptr1.method(ptr2);	//doesn't compile because C++ pointers can't have methods
 ptr1->method(ptr2);
 ```
 
@@ -3053,10 +3058,178 @@ let heterogen = vec![
 #### 8.1.3. Deleting a vector
 Deleting a vector will free all of its elements, any reference will produce an error by the borrow checker:
 ```Rust
+let bad_ref : &char;	//reference to a char
 {
 	let boring_vec = vec![1, 2, 3];
+	bad_ref = &boring_vec[0];
 	//...
-}  // boring_vec is out of scope here
+}	//compile error!
+// boring_vec is out of scope here
 ```
 
 ### 8.2. Storing UTF-8 Encoded Text with Strings
+Even if we already talked about them in [chapter 4.](#412-the-string-type), this section will look at this type in more depth. The Book gives three reasons for the complexity of strings for new rustaceans (even if they come from another language):
+- Rust compiler likes to expose potential errors.
+- `String` is a far more complex type than programmers usually think it is.
+- UTF-8		<!--Really?-->
+
+Any `String` is a collection of bytes (also called `char`s) with some methods methods on top which make sense only by interpreting a collection as text.
+
+#### 8.2.1. Definition
+First, let's give a clear definition of strings. Rust has only one string type built in the language: the string slice `str` (often seen borrowed `&str`) those are pointers to some UTF-8 encoded text located somewhere in RAM. String literals are hardcoded into the program's binary so they are loaded in RAM with the program thus string slices.
+
+The `String` type is provided by the standard library, it is growable, owned and also UTF-8 encoded. When saying "string", Rustaceans can mean `&str` or `String`. Rust isn't the only to have multiple string types namely C++ has cstrings `const char*` and `std::string`.
+
+
+#### 8.2.2. Creating a `String`
+Like you already know in order to create an empty string we use `String::new()`.
+
+If you want to convert a slice to a `String` you can use `String::from()`, if the type of the value to be converted has the trait `Display` there is also the method `.to_string()`:
+```Rust
+let lit = "Rust is lit";
+let mut lit_str : String;
+
+//equivalent
+lit_str = String::from(lit);
+lit_str = String::from("Rust is lit");
+
+lit_str = lit.to_string();
+lit_str = "Rust is lit".to_string();
+```
+
+Since those two methods are equivalent, the only difference you can find is readability.
+
+Remember that strings are UTF-8 encoded so non latin letters are accepted:
+```Rust
+let mut hello : String;
+
+hello = String::from("السلام عليكم");
+hello = String::from("Dobrý den");
+hello = String::from("Hello");
+hello = String::from("שלום");
+hello = String::from("नमस्ते");
+hello = String::from("こんにちは");
+hello = String::from("안녕하세요");
+hello = String::from("你好");
+hello = String::from("Olá");
+hello = String::from("Здравствуйте");
+hello = String::from("Hola");
+```
+
+#### 8.2.3. Concatenating `String`s
+You can concatenate a `String` with a string sclice with the `.push_str()` method:
+```Rust
+let mut s = String::from("Concate");
+s.push_str("nated");
+s;		//-> "Concatenated"
+```
+
+You can append a `char` at the end of a `String` with the method `.push()`:
+```Rust
+let mut missing_r = String::from("only one lette");
+missing_r.push('r');
+missing_r			//-> "only one letter"
+```
+
+To concatenate two `String`s together with the `+` operator:
+```Rust
+let love	= String::from("I love");
+let food		= String::from(" sandwiches");
+let loving_food	= love + &food;		//Note that we took ownership of `love`
+loving_food		//-> "I love sandwiches"
+
+love;	//compile error!
+```
+
+When we use the `+`, the function `add()` from the standard library is called. With generics (wait for [chapter 10.](#10-)) and associated types resoved, here is its signature:
+```Rust
+fn add(self, s: &str) -> String {
+```
+
+When reading this declaration, we could ask ourselves why the second parameter is of type `&str` when we passed it a `&String` when concataning. This is because the compiler _coerces_ `&food` into an `&str`, Rust uses _deref coercion_ where it changes `&food` into `&food[..]`, we'll see this feature in [chapter 15.](#15-).  
+We can also see the `add()` takes ownership of `self` because it isn't a reference.
+
+We can concatenate multiple strings together:
+```Rust
+let ter = String::from("ter");
+let na  = String::from("na");
+let ry  = String::from("ry");
+
+let ternary = ter + ". " + &na + ". " + &ry + ".";
+ternary;			//-> "ter. na. ry."
+```
+
+This is very long to write and to read so we can use the macro `format!()`:
+```Rust
+let ter = String::from("ter");
+let na  = String::from("na");
+let ry  = String::from("ry");
+
+let ternary = format!("{ter}. {na}. {ry}.");
+ternary;			//-> "ter. na. ry."
+ter;				//-> "ter", format! does not take ownership of its parameters
+```
+
+#### 8.2.4. Getting a character by index
+In any other programming language, we can get a char by index, but if we try on Rust:
+```Rust
+let keygen = "tolot";	//picture colonel picture, or is it?
+keygen[2]		//err-> the type `str` cannot be indexed by `{integer}`
+```
+<!--Explanation https://www.youtube.com/shorts/3ipFdRfFvK4-->
+
+
+To understand why, we have to look at the way `String`s are represented internally. `String` are represented the exact same way a `Vec<u8>` is, this seems to not cause any issue but let me introduce you to wide characters:
+```Rust
+let wide = String::from("Здравствуйте");	//`З` is not a 3, that's a capital Ze
+```
+At first glance you'd say that `wide.len()` returns `12` but it returns `24`.  
+To understand why let's talk about UTF-8, UTF-8 is way to encode characters said differently it is a [gigantic table](https://symbl.cc/en/unicode-table/) binding a number to a character (ie: the number 66 is bound to a capital A), the '8' in the name indicates that each character is encoded on 8 bits (1 byte). The issue is that a number stored on 8 bits can only go to 255 and there is a lot more than 256 characters in all languages. To address this issue, developpers made that each character can be stored up to 4 bytes, this means that there is $2^{32} \approx 4.3 \times 10^9$ characters that can be represented with this standard (in reality a lot less since there are under $5\times10^5$ because of unused plages).  
+A wide character is a character using more than 1 byte. If you recall, strings are stored as vectors of `u8` that means that wide characters need to be stored on 2 elements. For example, the character `й`:
+```Rust
+let wide_c = String::from("й");		//character number 0x0439
+
+let wide_c_vec : Vec<u8> = vec![0x4, 0x39];	//character split to fit inside a u8
+```
+
+Now you see why the length of `"Здравствуйте"` was 24, that was it took 24 bytes in memory even though it only has 12 characters. This is also why Rust's devs disabled this notation, if we wanted to get `wide_c[1]` it would have return either `57` or `'9'` which would have caused very strange bugs.
+
+If you want anther reason why Rust doesn't allow taking char by index, take the string `"नमस्ते"`. If we represent it as a vector of char it looks like this `['न', 'म', 'स', '्', 'त', 'े']`, the characters at index 3 and 5 do not make sense by themselves, it is because `'्'` follows `'स'` that it can be interpreted as `"स्"`.
+
+I could continue to give you arguments on why it would be a bad idea like time complexity of the operator `[]` would not be constant if we tried to fix the preceding problems but I will stop here.
+
+
+#### 8.2.5. Slicing strings
+Even if indexing is disabled for strings, slicing is not.
+```Rust
+let hell = "Здравствуйте";
+
+let s = &hell[..4];	//counts bytes
+s	//-> "Зд"
+```
+
+You should be careful when slicing.
+
+#### 8.2.6. Iterating over strings
+To avoid confusion you must explicitly indicate what to iterate: bytes or character. To do so, use the methods `.chars()` and `.bytes()` (work on `str` and `String`):
+```Rust
+let my_str : str	= "Зд";
+let myStr  : String	= String::from("Зд");
+
+for character in my_str.chars() {
+	print!("{character}");
+}	//out-> "Зд"
+
+for byte in myStr.bytes() {
+	print!("{byte} ");
+}	//out-> "208 151 208 180 "
+```
+
+
+#### 8.2.summary Strings are hard
+When you see that the raw markdown for this section is more than 230 lines, you understand that Rust didn't made the choice the make strings simple: there are two types of strings, when handling one of them you have to watch out for borrow error, wide strings make all string manipulation tedious, etc... . Those choice were made to allow Rustacean to handle all types of characters (not just ASCII ones) but come at the cost of having to look up the documentation each time you use `.contain()`.
+
+The good new is that the next section is about a simpler concept: hash maps.
+<!--How are those simple?-->
+
+### 8.3. Storing Keys with Associated Values in Hash Maps
